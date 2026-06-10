@@ -108,7 +108,9 @@ jobs:
           name: nodejs-package
           path: nodejs/*.tgz
       - name: Publish to npm
-        run: npm publish --tag ${{ github.event.inputs.dist-tag }} --access public --registry https://registry.npmjs.org
+        env:
+          DIST_TAG: ${{ github.event.inputs.dist-tag }}
+        run: npm publish --tag $DIST_TAG --access public --registry https://registry.npmjs.org
 
   publish-dotnet:
     name: Publish .NET SDK
