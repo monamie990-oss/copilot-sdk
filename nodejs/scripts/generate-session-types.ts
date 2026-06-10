@@ -341,7 +341,13 @@ async function formatCSharpFile(filePath: string): Promise<void> {
 async function generateCSharpTypes(schemaPath: string) {
     console.log("🔄 Generating C# types from JSON Schema...");
 
-    const schemaContent = await fs.readFile(schemaPath, "utf-8");
+    const base = path.resolve(__dirname);
+    const target = path.resolve(base, schemaPath);
+    const relative = path.relative(base, target);
+    if (relative.startsWith('..') || path.isAbsolute(relative)) {
+        throw new Error('Invalid schema path');
+    }
+    const schemaContent = await fs.readFile(target, "utf-8");
     const schema = JSON.parse(schemaContent) as JSONSchema7;
 
     const generatedAt = new Date().toISOString();
